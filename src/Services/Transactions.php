@@ -48,7 +48,7 @@ class Transactions
 	public $errMesg;
 	public $transaction_result;
 
-	public function getFee($network,$totalVoters)
+	public function getFee($network,$totalVoters,$multiPaymentLimit)
 	{	
 		$fee = '';
 		$totalFee = 0;
@@ -72,7 +72,7 @@ class Transactions
 			if ($totalVoters > 0) 
 			{
 				$totalVoters = $totalVoters +1; //add beneficary
-				$FeeQuotient =  floor($totalVoters/300)+1;
+				$FeeQuotient =  floor($totalVoters/$multiPaymentLimit)+1;
 				$totalFee = $FeeQuotient * $fee;
 			} else 
 			{
@@ -105,7 +105,7 @@ class Transactions
 			// delegate rank is between 1 and 25 and balance as required
 
             // get fee
-            $totalFee = $this->getFee($delegate->network, $voters->totalVoters);
+            $totalFee = $this->getFee($delegate->network, $voters->nbEligibleVoters, $beneficary->multiPaymentLimit);
 			echo "\n totalFee   = $totalFee \n";
 			if ($totalFee > $delegate->balance) {
 				$this->buildSucceed = false;
