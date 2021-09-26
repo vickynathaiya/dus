@@ -22,7 +22,6 @@ const base_url_infi = "https://api.infinitysolutions.io";
 const base_url_edge = "https://api.edge.infinitysolutions.io";
 const api_voters_infi_url = "/api/delegates/024844fa4b301ae6f9c514c963c18540630f1755dcca02ea9e91bae4b11d3dd1f1/voters";
 const api_voters_edge_url = "/api/delegates/024844fa4b301ae6f9c514c963c18540630f1755dcca02ea9e91bae4b11d3dd1f1/voters";
-const failed = 0;
 const success = 1;
 
 // const minVoterBalance = 100000;
