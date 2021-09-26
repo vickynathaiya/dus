@@ -76,9 +76,10 @@ class Admin extends Command
                             echo "Transactions performed at : $log->created_at";
                             echo "\n delegate address : $log->delegate_address";
                             echo "\n beneficary address : $log->beneficary_address";
-                            echo "\n transactions id : $log->transactions";
+                            echo "\n nb of transactions : $log->transactions";
                             echo "\n Amount to be distributed : $log->amount";
                             echo "\n total voters : $log->totalVoters";
+                            echo "\n total eligible voters : $log->totalEligibleVoters";
                             echo "\n delegate balance : $log->delegate_balance";
                             echo "\n fee : $log->fee";
                             echo "\n rate : $log->rate";
