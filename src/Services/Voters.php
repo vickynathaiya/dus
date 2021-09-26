@@ -40,6 +40,7 @@ class Voters
 		$lockedBalance = 0;
 		$retreive = success;
 		$pageNum = 1;
+		$debug = 1;
 		$delegateAddress = $delegate->address;
 		$delegateNetwork = $delegate->network;
 		$delegatePublicKey = $delegate->publicKey;
