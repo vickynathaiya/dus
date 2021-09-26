@@ -100,6 +100,7 @@ class Voters
 					
 				}
 			}
+			$pageNum++;
 		} while ($votersCount == 100);
 		$this->nbEligibleVoters = count($this->eligibleVoters);	
 		return $this;
