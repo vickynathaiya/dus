@@ -69,14 +69,14 @@ class Delegate
 	
 			//check if senders table exist
 			if (!Schema::hasTable('delegate_dbs')) {
-				echo "\n table delegate_dbs does not exist, run php artisan migrate \n";
+				echo "\n Delegate(checkDelegateValidity) : table delegate_dbs does not exist, run php artisan migrate \n";
 				return;
 			}
 			//check if there is a delegate entry in delegate table
 			$delegate = DelegateDb::all();
 			if (!$delegate->isEmpty()) {
 				//delegate exist
-				echo "\n There is already a delegate registered! \n";
+				echo "\n Delegate(checkDelegateValidity) : There is already a delegate registered! \n";
 				return;
 			} else {
 				//create delegate
@@ -89,16 +89,16 @@ class Delegate
 						'sched_active' => true,
 					]);
 					$registered = succeed;
-					echo "\n Delegate registered successfully \n";
+					echo "\n Delegate(checkDelegateValidity) : Delegate registered successfully \n";
 				} catch (QueryException $e) {
-					echo "\n error : \n";
+					echo "\n Delegate(checkDelegateValidity) : error : \n";
 					$registered = failed; 
 					return false;
 				}
 			}
 			return true;
 		} else {
-				echo "\n delegate not valid \n";
+				echo "\n Delegate(checkDelegateValidity) : delegate not valid \n";
 				return false;
 		}
 	}
@@ -109,13 +109,13 @@ class Delegate
 		//get the registered sender address,network and passphrase 
 		$response = [];
 		if (!Schema::hasTable('delegate_dbs')) {
-			echo "\n table delegate does not exist, did you run php artisan migrate ? \n";
+			echo "\n Delegate(initFromDb) : table delegate does not exist, did you run php artisan migrate ? \n";
 			return;
 		}
 		$delegate = DelegateDb::first();
 		if ($delegate) {
 			//sender exist
-			echo "\n delegate exist \n";
+			echo "\n Delegate(initFromDb) : delegate exist \n";
 			$this->network = $delegate->network;
 			$this->passphrase = $delegate->passphrase;			
 			$this->address = $delegate->address;
@@ -123,7 +123,7 @@ class Delegate
 			$this->sched_freq = $delegate->sched_freq;
 		} else {
 			//no delegate
-			echo "\n there is no delegate defined, did you run php artisan crypto:register ? \n";
+			echo "\n Delegate(initFromDb) : there is no delegate defined, did you run php artisan crypto:register ? \n";
 			return failed;
 
 		}
@@ -160,25 +160,25 @@ class Delegate
 				$message = $responseBodyAsString->message;
 				switch ($statusCode) {
 					case "422": 
-						echo "\n api peers $api_url  --  error : $error \n";
+						echo "\n Delegate(getPeers) : api peers $api_url  --  error : $error \n";
 						$nb_attempts++;
-						echo "\n Retryng in 5 seconds \n";
+						echo "\n Delegate(getPeers) : Retryng in 5 seconds \n";
 						sleep(5);
 						break;
 					case "429":
-						echo "\n api peers $api_url  --  error : $error";
+						echo "\n Delegate(getPeers) : api peers $api_url  --  error : $error";
 						$nb_attempts++;
-						echo "\n Retryng in 5 seconds \n";
+						echo "\n Delegate(getPeers) : Retryng in 5 seconds \n";
 						sleep(5);
 						break;
 					default:
 						echo "\n $statusCode \n";
-						echo "\n api peers $api_url  --  error : $error \n";
+						echo "\n Delegate(getPeers) : api peers $api_url  --  error : $error \n";
 						break;
 				}
 			}
 			if ($nb_attempts > 5) {
-				echo "\n unable to get peers, exiting";
+				echo "\n Delegate(getPeers) : unable to get peers, exiting";
 				break;
 			}	
 		}
@@ -203,7 +203,7 @@ class Delegate
 		// 
 		$peers = $this->getPeers($this->network);
 		if (!$peers) {
-			echo "\n checkDelegateValidity : no peers found \n";
+			echo "\n Delegate(checkDelegateValidity) : no peers found \n";
 			return failed;
 		}
 
@@ -219,7 +219,7 @@ class Delegate
 			//build api url
 			$ip_add = $peer->ip;
 			if (!isset($peer->ports->{"@arkecosystem/core-wallet-api"})) {
-				echo "\n the field arkecosystem/core-wallet-api does not exist \n";
+				echo "\n Delegate(checkDelegateValidity) : the field arkecosystem/core-wallet-api does not exist \n";
 				return false;
 			}
 			$port = $peer->ports->{"@arkecosystem/core-wallet-api"};
@@ -239,7 +239,7 @@ class Delegate
 					if ($isDelegate == 1) {
 						if ($isResigned == 0) {
 							$valid = true;
-							echo "\n isDelegate = $isDelegate   -- isResigned = $isResigned \n";
+							echo "\n Delegate(checkDelegateValidity) : isDelegate = $isDelegate   -- isResigned = $isResigned \n";
 							break;
 						}
 					}
@@ -262,15 +262,15 @@ class Delegate
 		$this->peer_port = $port;
  		$this->nonce = $nonce;
 		$this->balance = (int)$balance;
-		echo "\n checkDelegateValidity -- delegate balance : $this->balance";
+		echo "\n Delegate(checkDelegateValidity) : delegate balance : $this->balance \n";
 		if (!$isDelegate) {
-			echo "\n it is not yet a delegate \n";
+			echo "\n Delegate(checkDelegateValidity) : it is not yet a delegate \n";
 		} else {
 			if ($isResigned) {
-				echo "\n delegate  is Resigned \n";
+				echo "\n Delegate(checkDelegateValidity) : delegate  is Resigned \n";
 			}
 		}
-		echo "api url : $api_url \n"; 
+		echo "\n Delegate(checkDelegateValidity) : api url : $api_url \n"; 
 		
 		return $valid;
 	}
@@ -281,9 +281,9 @@ class Delegate
 		$api_delegates_url = api_delegates_edge_url;
 
 		// check if delegate balance is grater than the minimum required
-		echo "\n delegate balance : $this->balance \n";
+		echo "\n Delegate(checkDelegateEligibility) : delegate balance : $this->balance \n";
 		if ($this->balance < MinDelegateBalance) {
-			echo "\n insufficient balance \n";
+			echo "\n Delegate(checkDelegateEligibility) : insufficient balance \n";
 			return false;
 		}
 		// get list of delegate
@@ -291,7 +291,7 @@ class Delegate
 
 
 		if ($delegate_network == "infi") {
-			echo "\n delegate network : $delegate_network \n";
+			echo "\n Delegate(checkDelegateEligibility) : delegate network : $delegate_network \n";
 			$api_delegates_url = api_delegates_infi_url;
 		}
 
@@ -312,22 +312,22 @@ class Delegate
 					}
 				}
 				if ($found) {
-					echo "\n delegate rank : $this->rank \n";					
+					echo "\n Delegate(checkDelegateEligibility) : delegate rank : $this->rank \n";					
 					if ($this->rank >= MinDelegateRank && $this->rank <= MaxDelegateRank){
 						return true;
 					}else{
 						return false;
 					}
 				} else {
-					echo "\n delegate not found !!! \n";
+					echo "\n Delegate(checkDelegateEligibility) : delegate not found !!! \n";
 					return false;
 				}
 			} else {
-				echo "\n  number of delegate 0 !!! \n";
+				echo "\n  Delegate(checkDelegateEligibility) : number of delegate 0 !!! \n";
 				return false;
 			} 			
 		} else {
-				echo "\n no data returned from the api delagate url !!! \n";
+				echo "\n Delegate(checkDelegateEligibility) :  no data returned from the api delagate url !!! \n";
 				return false;
 			}
 	}

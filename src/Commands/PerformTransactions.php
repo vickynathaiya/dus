@@ -57,7 +57,7 @@ class PerformTransactions extends Command
      */
     public function handle()
     {
-        $disabled = 0;
+        $disabled = 1;
         
 		$this->info("---------------------------------------------");
         echo date('d-m-y h:i:s'); 
@@ -69,13 +69,13 @@ class PerformTransactions extends Command
         $success = $delegate->initFromDB();
         if (!$success) 
         {
-            $this->info("Error initialising Delegate from DB ");
+            $this->info(" PerformTransactions(cmd) : Error initialising Delegate from DB ");
             return false;
         }
 
         // check if scheduler is active
         if (!$delegate->sched_active) {
-            echo "\n Scheduler is not active, activate scheduler using : php artisan crypto:admin enable_sched \n";
+            echo "\n PerformTransactions(cmd) : Scheduler is not active, activate scheduler using : php artisan crypto:admin enable_sched \n";
             return;
         }
 
@@ -87,7 +87,7 @@ class PerformTransactions extends Command
                 $next_transactions =  $sched_freq - $latest_transactions->hourCount;
                 $latest_transactions->hourCount = $latest_transactions->hourCount + 1;
                 $latest_transactions->save();
-                $this->info("Next Transactions in $next_transactions hours");
+                $this->info("PerformTransactions(cmd) : Next Transactions in $next_transactions hours");
                 return;
             }
         }
@@ -96,40 +96,40 @@ class PerformTransactions extends Command
         $valid = $delegate->checkDelegateValidity();
 
 		// Check Delegate  Eligibility
-        $this->info(" ----------- checking delegate elegibility");
+        $this->info(" PerformTransactions(cmd) :  ----------- checking delegate elegibility");
         // $transactions = new Transactions();
         $success = $delegate->checkDelegateEligibility();
 		if (!$success) {
-			$this->info("(error) delegate is not yet eligble trying after an hour");
+			$this->info("PerformTransactions(cmd) : (error) delegate is not yet eligble trying after an hour");
 			return false;
 		}
-        $this->info("(success) delegate is eligible");
+        $this->info("PerformTransactions(cmd) : (success) delegate is eligible");
 
         // get beneficary and amount = (delegate balance - totalFee) * 20%
-        $this->info(" ---------------- get benificiary info");
+        $this->info(" PerformTransactions(cmd) : ---------------- get benificiary info");
         $beneficary = new Beneficary();
         $success = $beneficary->initBeneficary($delegate);
         if (!$success) {
-            $this->info("an issue happened with the beneficary");
+            $this->info("PerformTransactions(cmd) : an issue happened with the beneficary");
 			return false; 
         }
         $requiredMinimumBalance = $beneficary->requiredMinimumBalance;
 
         //init voters
-        $this->info(" ---------- initialising voters");
+        $this->info(" PerformTransactions(cmd) : ---------- initialising voters");
 		$voters = new voters();
         $voters = $voters->initEligibleVoters($delegate,$requiredMinimumBalance);
 		if (!($voters->totalVoters > 0)) {
 			echo "\n there is no Eligible voters \n";
 			return false;
 		}
-        $this->info("voters initialized successfully \n ");
-        $this->info("number of Elegible voters " . $voters->nbEligibleVoters);
+        $this->info("PerformTransactions(cmd) : voters initialized successfully \n ");
+        $this->info("PerformTransactions(cmd) : number of Elegible voters " . $voters->nbEligibleVoters);
     
         $transactions = new Transactions();
         $transactions = $transactions->buildTransactions($voters,$delegate,$beneficary);
         if (!$transactions->buildSucceed) {
-            $this->info("(error) " . $transactions->errMesg);
+            $this->info("PerformTransactions(cmd) : (error) " . $transactions->errMesg);
             return false;
         }
         //log transaction
@@ -146,8 +146,8 @@ class PerformTransactions extends Command
         $cryptoLog->hourCount = 0;
         $cryptoLog->succeed = false;
 
-        $this->info("transaction initialized successfully");
-        $this->info("ready to run the folowing transactions ");
+        $this->info("PerformTransactions(cmd) : transaction initialized successfully");
+        $this->info("PerformTransactions(cmd) : ready to run the folowing transactions ");
         echo json_encode($transactions->transactions, JSON_PRETTY_PRINT);
         echo "\n";
 
@@ -160,13 +160,13 @@ class PerformTransactions extends Command
 
         if (!$disabled) {
             //perform transactions
-            echo "\n performing the transactions \n";
+            echo "\n PerformTransactions(cmd) : performing the transactions \n";
             $success = $transactions->sendTransactions();
             if (!$success) {
-                echo "\n error while sending transactions \n";
+                echo "\n PerformTransactions(cmd) : error while sending transactions \n";
                 return 0;
             }
-            $this->info("transactions performed successefully");
+            $this->info("PerformTransactions(cmd) : transactions performed successefully");
             echo json_encode($transactions->transactions );
         } 
     }
