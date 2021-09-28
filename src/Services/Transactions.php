@@ -130,7 +130,7 @@ class Transactions
 			echo "\n beneficary rate = $this->rate \n";
 			if ($delegate->balance > $beneficary->maintainMinimumBalance ) {
 				if ($delegate->balance > $totalFee ) {
-					$remaining_balance = $delegate->balance - ($totalFee + $beneficary->maintainMinimumBalance);
+					$remaining_balance = $delegate->balance - ($totalFee + ($beneficary->maintainMinimumBalance * 100000));
 					// Beneficiary Amount
 					$beneficaryAmount = ($remaining_balance * $beneficary->rate)/100; 
 					echo "\n beneficiaryAmount = $beneficaryAmount \n";
