@@ -208,7 +208,7 @@ class Transactions
 			$response = [];
 			$client = new Client();
 			$api_url = "http://$this->peer_ip:$this->peer_port/api".'/transactions';
-			echo "\n ___________________________________________________________________ \n";
+			echo "\n ___________________________________________________________________ \n";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
 			if ($debug) {echo "\n Transactions(sendTransactions) api_url   : $api_url \n";}
 		
 			try {
@@ -216,7 +216,7 @@ class Transactions
 				$data = $req->getBody()->getContents();
 				if ($data)
 				{
-					if ($debug) {echo "\n Transactions(sendTransactions) request response : json_encode($data, JSON_PRETTY_PRINT) \n";}
+					if ($debug) {echo json_encode($data, JSON_PRETTY_PRINT);}
 					$data = json_decode($data);
 					//treating data errors
 					if (isset($data->errors))
@@ -227,7 +227,8 @@ class Transactions
 						echo "\n Transactions(sendTransactions) (Failed) Return Funds to Main Wallet";
 						echo "\n Transactions(sendTransactions) (Failed) to connect to the node server.";
 						$this->transaction_result = json_encode($response);
-						echo "\n Transactions(sendTransactions) response : json_encode($response, JSON_PRETTY_PRINT) \n";
+						echo "\n Transactions(sendTransactions) response : "; 
+						echo json_encode($response, JSON_PRETTY_PRINT);
 						return false;
 					} else {
 						echo "\n Transactions(sendTransactions) transaction sent successfully \n";
