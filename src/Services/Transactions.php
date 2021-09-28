@@ -197,7 +197,7 @@ class Transactions
 
 	public function sendTransactions()
 	{
-
+		$debug = 1;
 		if (!count($this->transactions)) {
 			echo "\n there is no transaction \n";
 			return false;
