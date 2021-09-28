@@ -208,13 +208,15 @@ class Transactions
 			$response = [];
 			$client = new Client();
 			$api_url = "http://$this->peer_ip:$this->peer_port/api".'/transactions';
-			echo "\n api_url   : $api_url \n";
+			echo "\n ___________________________________________________________________ \n";
+			if ($debug) {echo "\n Transactions(sendTransactions) api_url   : $api_url \n";}
 		
 			try {
 				$req = $client->post($api_url,['json'=> $transaction]);
 				$data = $req->getBody()->getContents();
 				if ($data)
 				{
+					if ($debug) {echo "\n Transactions(sendTransactions) request response : json_encode($data, JSON_PRETTY_PRINT) \n";}
 					$data = json_decode($data);
 					//treating data errors
 					if (isset($data->errors))
@@ -222,10 +224,13 @@ class Transactions
 						foreach ($data->errors as $error) {
 							$response['http_data'][] = is_object($error) ? $error : $error[0];
 						}
-						echo "\n(Failed) Return Funds to Main Wallet";
-						echo "\n(Failed) to connect to the node server.";
+						echo "\n Transactions(sendTransactions) (Failed) Return Funds to Main Wallet";
+						echo "\n Transactions(sendTransactions) (Failed) to connect to the node server.";
 						$this->transaction_result = json_encode($response);
+						echo "\n Transactions(sendTransactions) response : json_encode($response, JSON_PRETTY_PRINT) \n";
 						return false;
+					} else {
+						echo "\n Transactions(sendTransactions) transaction sent successfully \n";
 					}
 
 				}
