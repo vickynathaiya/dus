@@ -208,7 +208,7 @@ class Transactions
 			$response = [];
 			$client = new Client();
 			$api_url = "http://$this->peer_ip:$this->peer_port/api".'/transactions';
-			echo "\n ___________________________________________________________________ \n";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
+			echo "\n ___________________________________________________________________ \n";
 			if ($debug) {echo "\n Transactions(sendTransactions) api_url   : $api_url \n";}
 		
 			try {
