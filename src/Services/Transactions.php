@@ -137,7 +137,7 @@ class Transactions
 					// Balance to be distributed to voters
 					$amountToBeDistributed = $remaining_balance - $beneficaryAmount;
 					$this->amountToBeDistributed = $amountToBeDistributed;
-					echo "\n amount to be distributed : $amountToBeDistributed";
+					echo "\n amount to be distributed : $amountToBeDistributed \n";
 				} else {
 					echo "\n delegate balance less than fee, trying at next iteration in 1 hour \n";
 					$this->buildSucceed = false;

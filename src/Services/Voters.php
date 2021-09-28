@@ -33,7 +33,7 @@ class Voters
 	public $totalVoters;
 	public $nbEligibleVoters;
 
-	public functi72182on initEligibleVoters(Delegate $delegate,$minVoterBalance) 
+	public function initEligibleVoters(Delegate $delegate,$minVoterBalance) 
 	{
 		$this->eligibleVoters = [];
 		$this->totalVoters = 0;
