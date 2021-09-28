@@ -33,7 +33,7 @@ class Voters
 	public $totalVoters;
 	public $nbEligibleVoters;
 
-	public function initEligibleVoters(Delegate $delegate,$minVoterBalance) 
+	public functi72182on initEligibleVoters(Delegate $delegate,$minVoterBalance) 
 	{
 		$this->eligibleVoters = [];
 		$this->totalVoters = 0;
@@ -110,7 +110,7 @@ class Voters
 	{
 		//with eligibleVoters 
 		//proportion (voter balance x 100) % sum of voters balance.
-		
+		$debug = 0;
 		$this->portionByVoter = [];
 		//perform sum of eligible voters balance
 		$totalVotersBalance = 0;
@@ -123,7 +123,7 @@ class Voters
 		foreach ($this->eligibleVoters as $i => $voter) {
 			$totalVoterBalance = $voter['balance'] + $voter['lockedBalance'];
 			$portion = ($totalVoterBalance * 100) / $totalVotersBalance;
-			echo "\n portion  : $portion \n";
+			if ($debug) {echo "\n Voters(calculatePortion)  : $portion \n";}
 			$this->eligibleVoters[$i]['portion'] = $portion;
 		}
 		return $this;
