@@ -23,7 +23,7 @@ class CreateCryptologsTable extends Migration
             $table->integer('totalEligibleVoters');
             $table->integer('fee');
             $table->decimal('rate');
-            $table->integer('amount');
+            $table->bigInteger('amount');
             $table->boolean('succeed');
             $table->integer('hourCount');
             $table->timestamps();
